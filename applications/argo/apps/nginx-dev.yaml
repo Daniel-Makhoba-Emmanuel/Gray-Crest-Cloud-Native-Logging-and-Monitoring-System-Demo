@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/Daniel-Makhoba-Emmanuel/GitOps-Repo.git
-    path: multiple-apps-multiple-environments/apps/nginx/chart
+    path: applications/apps/nginx/chart
     targetRevision: 'main'
     helm:
       valueFiles:
