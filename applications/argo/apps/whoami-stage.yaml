@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Daniel-Makhoba-Emmanuel/GitOps-Repo.git
+    repoURL: https://github.com/Daniel-Makhoba-Emmanuel/Gray-Crest-Cloud-Native-Logging-and-Monitoring-System-Demo.git
     path: applications/apps/whoami/chart
     targetRevision: 'main'
     helm:
