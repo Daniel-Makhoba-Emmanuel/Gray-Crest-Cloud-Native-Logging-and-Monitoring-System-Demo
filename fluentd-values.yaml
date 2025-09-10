@@ -23,8 +23,13 @@ extraVolumeMounts:
   - name: posfiles
     mountPath: /var/log/fluentd-pos
 
-# Main Fluentd configuration (chart expects this under `config`)
+# Add Kafka plugin
+plugins:
+  - fluent-plugin-kafka
+
+# Fluentd pipeline
 config: |-
+  # 1. Tail container logs
   <source>
     @type tail
     path /var/log/containers/*.log
@@ -33,6 +38,7 @@ config: |-
     format json
   </source>
 
+  # 2. Enrich with Kubernetes metadata
   <filter kubernetes.**>
     @type kubernetes_metadata
     kubernetes_url 'https://kubernetes.default.svc:443'
@@ -41,8 +47,23 @@ config: |-
     bearer_token_file /var/run/secrets/kubernetes.io/serviceaccount/token
   </filter>
 
-  <match **>
-    @type stdout
+  # 3. Forward logs to Kafka
+  <match kubernetes.**>
+    @type kafka2
+    brokers kafka.logging.svc.cluster.local:9092
+    default_topic kubernetes-logs
+
+    # Auth (SCRAM-SHA-256 with SASL_PLAINTEXT)
+    sasl_over_ssl false
+    username user1
+    password tVnCLXgzPE
+    scram_mechanism sha256
+
+    use_event_time true
+
+    <format>
+      @type json
+    </format>
   </match>
 
 # Resource requests/limits
