@@ -56,7 +56,7 @@ config: |-
     # Auth (SCRAM-SHA-256 with SASL_PLAINTEXT)
     sasl_over_ssl false
     username user1
-    password tVnCLXgzPE
+    password 
     scram_mechanism sha256
 
     use_event_time true
